@@ -1,0 +1,21 @@
+# IDE (PyCharm)
+.idea/
+
+# Ambiente virtual
+.venv/
+venv/
+env/
+
+# Ficheiros Python compilados
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ficheiros de sistema
+.DS_Store
+Thumbs.db
+
+# Outros
+*.log
+*.sqlite3

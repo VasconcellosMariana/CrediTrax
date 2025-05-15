@@ -25,8 +25,35 @@ class Movimento:
         self.id = cursor.lastrowid
 
     def __repr__(self):
-        sinal = "+" if self.tipo == "receita" else "-"
-        return f"{self.data} | {self.categoria} | {sinal}{self.valor:.2f} | {self.descricao}"
+        signal = "+" if self.type == "income" else "-"
+        return f"{self.date} | {self.category} | {signal}{self.value:.2f} | {self.description}"
+
+
+class CategoryManager:
+    def __init__(self, conn):
+        self.conn = conn
+
+    def list(self, type):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT name FROM categories WHERE type=? ORDER BY name", (type,))
+        return [row[0] for row in cursor.fetchall()]
+
+    def add(self, name, type):
+        cursor = self.conn.cursor()
+        cursor.execute("""
+            INSERT INTO categories (name, type, origin)
+            VALUES (?, ?, 'custom')
+        """, (name, type))
+        self.conn.commit()
+
+
+def can_add_transaction(type, value, category, wallet_id):
+    return all([
+        type in ['income', 'expense'],
+        value > 0,
+        wallet_id is not None,
+        category not in [None, '']
+    ])
 
 
 # Compra e venda de ações
